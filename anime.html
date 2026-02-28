@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeVerse - Download Anime Movies & Series</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0f0f1a 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(180deg, #1a0a2e 0%, #0d0d1a 100%);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #ff006e;
+            box-shadow: 0 4px 20px rgba(255, 0, 110, 0.3);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff006e, #8338ec, #3a86ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 0, 110, 0.5);
+        }
+
+        .logo span {
+            color: #fff;
+            -webkit-text-fill-color: #fff;
+        }
+
+        /* Search Box */
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 8px 15px;
+            border: 1px solid rgba(255, 0, 110, 0.3);
+            width: 250px;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #fff;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-box i {
+            color: #ff006e;
+            margin-left: 10px;
+        }
+
+        /* Anime Category Slider */
+        .category-slider {
+            background: linear-gradient(90deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%);
+            padding: 15px 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+        }
+
+        .category-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .slider-container {
+            display: flex;
+            gap: 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Different colors for each category */
+        .cat-shonen {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: #fff;
+        }
+
+        .cat-isekai {
+            background: linear-gradient(135deg, #8338ec, #3a86ff);
+            color: #fff;
+        }
+
+        .cat-romance {
+            background: linear-gradient(135deg, #ff006e, #ff5c8d);
+            color: #fff;
+        }
+
+        .cat-action {
+            background: linear-gradient(135deg, #e63946, #ff006e);
+            color: #fff;
+        }
+
+        .cat-fantasy {
+            background: linear-gradient(135deg, #7209b7, #b5179e);
+            color: #fff;
+        }
+
+        .cat-horror {
+            background: linear-gradient(135deg, #2d2d2d, #4a4a4a);
+            color: #fff;
+        }
+
+        .cat-comedy {
+            background: linear-gradient(135deg, #ffbe0b, #fb5607);
+            color: #fff;
+        }
+
+        .cat-mecha {
+            background: linear-gradient(135deg, #4361ee, #4cc9f0);
+            color: #fff;
+        }
+
+        .cat-slice {
+            background: linear-gradient(135deg, #2ec4b6, #38b000);
+            color: #fff;
+        }
+
+        .cat-sports {
+            background: linear-gradient(135deg, #f72585, #7209b7);
+            color: #fff;
+        }
+
+        .cat-movie {
+            background: linear-gradient(135deg, #e63946, #1d3557);
+            color: #fff;
+        }
+
+        .cat-ongoing {
+            background: linear-gradient(135deg, #06d6a0, #118ab2);
+            color: #fff;
+        }
+
+        .category-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(255, 0, 110, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #ff006e;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, #ff006e, transparent);
+            margin-left: 15px;
+        }
+
+        /* Anime Grid */
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .anime-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .anime-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* Anime Card */
+        .anime-card {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 0, 110, 0.2);
+            position: relative;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.3);
+            border-color: #ff006e;
+        }
+
+        .card-image {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .anime-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        /* Quality Badge */
+        .quality-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: linear-gradient(135deg, #ff006e, #8338ec);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(255, 0, 110, 0.5);
+        }
+
+        /* Episode Badge */
+        .episode-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #3a86ff;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: bold;
+            border: 1px solid #3a86ff;
+        }
+
+        /* Rating Badge */
+        .rating-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffbe0b;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        /* Card Info */
+        .card-info {
+            padding: 12px;
+            background: linear-gradient(180deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 1) 100%);
+        }
+
+        .anime-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+
+        .anime-meta {
+            font-size: 11px;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .anime-year {
+            color: #ff006e;
+            font-weight: 600;
+        }
+
+        .anime-type {
+            background: rgba(255, 0, 110, 0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: #ff006e;
+            font-size: 10px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 110, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .page-btn:hover, .page-btn.active {
+            background: linear-gradient(135deg, #ff006e, #8338ec);
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(255, 0, 110, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(180deg, #0d0d1a 0%, #1a0a2e 100%);
+            padding: 30px 20px;
+            border-top: 2px solid #ff006e;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ff006e;
+        }
+
+        .footer-text {
+            color: #555;
+            font-size: 13px;
+        }
+
+        .footer-text span {
+            color: #ff006e;
+        }
+
+        /* Glow Effects */
+        .glow-effect {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 0, 110, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .glow-1 {
+            top: 10%;
+            left: -100px;
+        }
+
+        .glow-2 {
+            bottom: 20%;
+            right: -100px;
+            background: radial-gradient(circle, rgba(131, 56, 236, 0.1) 0%, transparent 70%);
+        }
+
+        /* Play Button Overlay */
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 0, 110, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .anime-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .play-overlay i {
+            color: #fff;
+            font-size: 20px;
+            margin-left: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Glow Effects -->
+    <div class="glow-effect glow-1"></div>
+    <div class="glow-effect glow-2"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-torii-gate"></i> Anime<span>Verse</span>
+            </div>
+            <div class="search-box">
+                <input type="text" placeholder="Search anime...">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Slider -->
+    <div class="category-slider">
+        <div class="slider-container">
+            <button class="category-btn cat-shonen">
+                <i class="fas fa-fist-raised"></i> Shonen
+            </button>
+            <button class="category-btn cat-isekai">
+                <i class="fas fa-portal-enter"></i> Isekai
+            </button>
+            <button class="category-btn cat-romance">
+                <i class="fas fa-heart"></i> Romance
+            </button>
+            <button class="category-btn cat-action">
+                <i class="fas fa-bolt"></i> Action
+            </button>
+            <button class="category-btn cat-fantasy">
+                <i class="fas fa-hat-wizard"></i> Fantasy
+            </button>
+            <button class="category-btn cat-horror">
+                <i class="fas fa-ghost"></i> Horror
+            </button>
+            <button class="category-btn cat-comedy">
+                <i class="fas fa-laugh"></i> Comedy
+            </button>
+            <button class="category-btn cat-mecha">
+                <i class="fas fa-robot"></i> Mecha
+            </button>
+            <button class="category-btn cat-slice">
+                <i class="fas fa-coffee"></i> Slice of Life
+            </button>
+            <button class="category-btn cat-sports">
+                <i class="fas fa-volleyball-ball"></i> Sports
+            </button>
+            <button class="category-btn cat-movie">
+                <i class="fas fa-film"></i> Movies
+            </button>
+            <button class="category-btn cat-ongoing">
+                <i class="fas fa-play-circle"></i> Ongoing
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h2 class="section-title">
+            <i class="fas fa-fire"></i> Latest Anime Releases
+        </h2>
+
+        <div class="anime-grid">
+            <!-- Card 1 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhOd6_d2UpS5t5m-5wWB_hbD0Zt7fT9m6MDCVlVPAT-rgqqHV6jrhcIBkj91D_mfykYPsD48H-QqDuYx3Kvqy3GC7mPrmhMoFxk7EldIHK1TrUPRAtFvrRDQWxrjs02b_2tORB_g9FYP6OVv-51evfwNCezv0ibs2-P-frw2iHOSD-Ri9MWcDO2QZOfZUw/s1920/20260228_014004.jpg" alt="Anime 1">
+                    <span class="quality-badge">4K</span>
+                    <span class="episode-badge">EP 12</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 9.2</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">Demon Slayer: Infinity Castle Arc</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2025</span>
+                        <span class="anime-type">Shonen</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh7h7bue_RR_RnsT_-7jrKIRlVL4bNa5wDebZ91vKcAlApTMeXfWR0L0t8YKhc_8EWbYMyF_80BxhEUS4FoME7NmLlczI9IPvcEo8Sn3xPV94ctzb44Wp4P2H3cL8j87PA3M30swd493tL6wYTJ2ZK9FpFp6oQHPkF1-IUfxbbIW0r4jSbfhnXGgwuUwRM/s1920/20260228_013941.jpg" alt="Anime 2">
+                    <span class="quality-badge">FHD</span>
+                    <span class="episode-badge">EP 24</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 8.9</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">Jujutsu Kaisen Season 3</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2025</span>
+                        <span class="anime-type">Action</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhndQlNPNg93B7du7T2YaESnd92c9nm2JDu0N_H7Hat6FSxxlL5sv1dAXNIA2aoyZjx7eGKDr9KSoMYu_pNzPmzIR5_SUwu_KnrbJxia1diPcWiLBXa9AlvI0DfpwJ_XtLGaVzaxXAeOh1jmQ-1MnQMDZcDPn9M3DUoQhns3nv60GnIYZ9T3FWRfJOPP7I/s1920/20260228_013641.jpg" alt="Anime 3">
+                    <span class="quality-badge">BluRay</span>
+                    <span class="episode-badge">Movie</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 9.5</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">One Piece Film: RED</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2024</span>
+                        <span class="anime-type">Fantasy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiEV3pGF0WxDsF8gncr5FI_OafFHJdv9OIsdTFOeVAJ3ZaNlJLGHC7CrFYYikaxCQEriasYGxzqoJlhyphenhyphenSVPjeMbL8rAPMm6nfnRAmH2-mmXA7I7zTB9sz_kMHlFQ-dS8kAPv1G0rp66V9asRysDVheNVjQbVzestemH2RsiDYz7FMYq7HydxaY4EAGejiE/s1920/20260228_013442.jpg" alt="Anime 4">
+                    <span class="quality-badge">4K HDR</span>
+                    <span class="episode-badge">EP 16</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 8.7</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">Attack on Titan: Final Season</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2024</span>
+                        <span class="anime-type">Dark Fantasy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhmbN-l1h5S7lFR4bYf6DeN01UfuIKoX1usfSbXc9GPsJrqGhKJqLHOgK3sCjXytVC95-cyVKXsONOF5_R0y-DMnsm4ga_30pD3u5zAErWUaIfLa7ui8Y4hKnLcV8NKAeYFk0FCD-hvkv1M2O44E1fu3za26f5K2sJcf7ne3ZrZFWXAdfnwXbogmKxsaEM/s1920/20260228_013311.jpg" alt="Anime 5">
+                    <span class="quality-badge">FHD</span>
+                    <span class="episode-badge">EP 13</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 9.0</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">Solo Leveling Season 2</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2025</span>
+                        <span class="anime-type">Isekai</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgGFIOUlh-o-yomyPsUxHwgjEoXz40ngfFGztUY6QK12b_uSu-l9byfA_67P18B0pI0J8pWOTGxK52i9NTiv9cLAxsH5ZvSs_VsVoRUWKvYjXlcC4cEPbDBYL9hQ-2F9iggdQkPxek-_PCZmhgifBgt0CK1dPI2XL4p5bhy59jQt5UgpHDmv871DNb80fI/s1920/20260228_013154.jpg" alt="Anime 6">
+                    <span class="quality-badge">4K</span>
+                    <span class="episode-badge">EP 25</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 8.8</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">My Hero Academia S7</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2025</span>
+                        <span class="anime-type">Superhero</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjKmxFtFz700SMDH-d7nRzsfk5ScynpGGsEVk6R61KbpYAZ16qo2asGRoGNGcsccrS0b1o2J6Mzg6_hpPBvBameQ71Q_OS7xruzybDUlJDXYOhuCsN0u0UTEsLR-V5LEQ-yeKD0rES9de5J-mvpi0EY8xETBg5v9vqsHdl62M4FZJDCGF6rAU4bM_COgrI/s1920/20260228_122124.jpg" alt="Anime 7">
+                    <span class="quality-badge">BluRay</span>
+                    <span class="episode-badge">Complete</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 9.3</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">Chainsaw Man S2</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2025</span>
+                        <span class="anime-type">Horror</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhsWTjuznYg8o62RnjLE9bU6h6HLn-0u9G3Iae2-dHMJho7sammkGriTsLuZUIw5p3-NMa5MNfKCWOaw9GimyGx0tz-iEfGNPYGYXyUBlDidxNgcNxdrST8NlwgWxZRynmtlzz6gvfpD7Sf38BMEy4iyKDfTlSdLCqqDP7byhSlZQyDbtOcku9zz2E_Syo/s1920/20260228_122058.jpg" alt="Anime 8">
+                    <span class="quality-badge">FHD</span>
+                    <span class="episode-badge">EP 12</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 8.6</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">Spy x Family S3</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2025</span>
+                        <span class="anime-type">Comedy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjRVxNSO0URqbUNbMtSEV133BlxIbspy6vYhW8dg0Tq7QjoumzkxW7FsrE6MEH_cOztnFEVBlT-vZ-EDmr6c3FiDXr3RY0igoz0YNutSZGrToCVG-0RnY33mMQ0zD55MlBqml-qBRnAhmUO0YbPrWvYfVGy9r4aftW2FqIJC7sU096KW1nyTsEtHmcnvgA/s1920/20260228_120950.jpg" alt="Anime 9">
+                    <span class="quality-badge">4K</span>
+                    <span class="episode-badge">EP 24</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 9.1</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">Black Clover: Sword of Wizard King</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2025</span>
+                        <span class="anime-type">Fantasy</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 10 -->
+            <div class="anime-card">
+                <div class="card-image">
+                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEic-1Yin2Ki7sstdfEhSwqvR_D6thno6lTE00542n_8SJRCapGxfHWgcPPWB52iheXfuNEmqHqP0rAiZixK8Yv20QtJO8TnhfG3VAfPPU4tlMPdha_asv0PKlPtw8axBUdjoLaZWANeVPQxVaCFlR_xoxm-Y9EnmIMVoEU7MKGCU9kItkXKQFvFUwZTJEA/s1920/20260228_014543.jpg" alt="Anime 10">
+                    <span class="quality-badge">FHD</span>
+                    <span class="episode-badge">EP 13</span>
+                    <span class="rating-badge"><i class="fas fa-star"></i> 8.9</span>
+                    <div class="play-overlay">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <h3 class="anime-title">Blue Lock Season 2</h3>
+                    <div class="anime-meta">
+                        <span class="anime-year">2025</span>
+                        <span class="anime-type">Sports</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="page-btn"><i class="fas fa-angle-left"></i></button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <button class="page-btn">4</button>
+            <button class="page-btn">5</button>
+            <button class="page-btn"><i class="fas fa-angle-right"></i></button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-home"></i> Home</a>
+                <a href="#"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#"><i class="fas fa-shield-alt"></i> DMCA</a>
+                <a href="#"><i class="fas fa-exclamation-triangle"></i> Disclaimer</a>
+                <a href="#"><i class="fas fa-envelope"></i> Contact</a>
+                <a href="#"><i class="fas fa-lock"></i> Privacy Policy</a>
+            </div>
+            <p class="footer-text">
+                © 2025 <span>AnimeVerse</span>. All Rights Reserved. | Made with ❤️ for Anime Fans
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
